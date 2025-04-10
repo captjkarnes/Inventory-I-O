@@ -11,13 +11,49 @@ typedef struct Item {
 } Item;
 
 // Function prototypes
-void add_item(Item **head);
-void view_items(Item *head);
-Item* find_item(Item *head, const char *name);
-void purchase_item(Item *head);
+void add_item(Item **head); //Alayna
+void view_items(Item *head); //Alayna
+Item* find_item(Item *head, const char *name); //Jana
+void purchase_item(Item *head); //Jana
 void save_to_file(Item *head, const char *filename); //Dario
 Item* load_from_file(const char *filename); //Dario
 void free_list(Item **head); //Dario
+
+// Find Item
+Item*find_item(Item *head, const char *name){
+    while (head){
+        if(strcmp(head->name, name)==0){
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL;
+}
+
+//Purchase Item
+void purchase_item(Item *head){
+    char name [50];
+    int qty;
+
+    printf("Enter item name to purchase: ");
+    scanf("%[^\n]", name);
+
+    Item *item = find_item(head, name);
+    if (!item){
+        printf("Item not found!\n");
+        return;
+    }
+    printf("Enter quantity to purchase: ");
+    scanf("%d", &qty);
+
+    if (qty <= 0 || qty > item->quantity){
+        printf("Invalid or insufficient quantity!\n");
+        return;
+    }
+    item->quantity -= qty;
+    printf("Purchase successful. Remaining quantity: %d\n", item->quantity);
+}
+
 
 int main() {
     Item *inventory = load_from_file("inventory.dat");
